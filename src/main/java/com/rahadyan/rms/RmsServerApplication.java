@@ -8,6 +8,12 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
+/**
+ * 
+ * @author Rahadyan_W995
+ *
+ */
+
 @EntityScan(basePackageClasses = { 
 		RmsServerApplication.class,
 		Jsr310JpaConverters.class 

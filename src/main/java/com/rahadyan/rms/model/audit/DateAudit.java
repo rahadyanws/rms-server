@@ -10,6 +10,12 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.Instant;
 
+/**
+ * 
+ * @author Rahadyan_W995
+ *
+ */
+
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(
@@ -17,8 +23,9 @@ import java.time.Instant;
         allowGetters = true
 )
 public abstract class DateAudit implements Serializable {
+	private static final long serialVersionUID = -8360814381322631681L;
 
-    @CreatedDate
+	@CreatedDate
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
