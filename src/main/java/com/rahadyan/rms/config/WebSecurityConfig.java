@@ -3,7 +3,6 @@ package com.rahadyan.rms.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,7 +27,7 @@ import com.rahadyan.rms.security.JwtAuthenticationFilter;
         prePostEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
+	@Autowired
     CustomUserDetailsService customUserDetailsService;
 
     @Autowired
@@ -39,6 +38,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationFilter();
     }
 
+    /**
+	 * This method configure the AuthenticationManagerBuilder
+	 * set the userDetailsService with CustomUserDetailsService
+	 * and set the passwordEncoder
+	 * 
+	 * @param authenticationManagerBuilder
+	 */
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
@@ -46,17 +52,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
+    
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
+    /**
+	 * This method set the password encoder
+	 * the password encoder is set with BCryptPasswordEncoder
+	 */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * This method configure the HttpSecurity
+     * set corsFilter and CSRF support disabled
+     * set exception handling with JwtAuthenticationEntryPoint 
+     * set session creation policy with STATELESS
+     * and permit all authorize requests
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -81,11 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                         .permitAll()
-                    .antMatchers("/api/auth/**")
-                        .permitAll()
-                    .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
-                        .permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
+                    .antMatchers("/api/v1/auth/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated();
