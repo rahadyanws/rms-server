@@ -28,7 +28,16 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+/**
+ * 
+ * @author Rahadyan_W995
+ *
+ */
+
+@Api(description = "This is Authentication Controller")
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -48,6 +57,7 @@ public class AuthController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    @ApiOperation(value = "This API purpose to generate token using jwt auth.")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -64,6 +74,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
+    @ApiOperation(value = "This API purpose to store data user.")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
